@@ -55,6 +55,10 @@ const sessionOptions={
     },
 };
 
+app.get("/", (req, res) => {
+    res.render("home.ejs", { currUser: req.user });
+});
+
 // app.get("/",(req,res)=>{
 //     res.send("hi i am root");
 // });

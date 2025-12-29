@@ -47,6 +47,14 @@ const listingSchema = new Schema({
         ref:"User",
     },
 });
+
+// Add text index for better search performance
+listingSchema.index({ 
+    title: 'text', 
+    description: 'text', 
+    location: 'text' 
+});
+
 //understand this
 listingSchema.post("findOneAndDelete",async(listing) =>{
     if(listing){

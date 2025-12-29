@@ -1,0 +1,53 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+    <h2>
+        <i class="fa-solid fa-filter"></i> Filtered Results 
+        <% if(query) { %>for "<%= query %>"<% } %>
+    </h2>
+    
+    <!-- Active Filters Display -->
+    <div class="d-flex flex-wrap gap-2 mt-3">
+        <% if(query) { %>
+            <span class="badge bg-info">Search: <%= query %></span>
+        <% } %>
+        <% if(typeof location !== 'undefined' && location) { %>
+            <span class="badge bg-primary">Location: <%= location %></span>
+        <% } %>
+        <% if(typeof minPrice !== 'undefined' && minPrice) { %>
+            <span class="badge bg-success">Min: ₹<%= minPrice %></span>
+        <% } %>
+        <% if(typeof maxPrice !== 'undefined' && maxPrice) { %>
+            <span class="badge bg-success">Max: ₹<%= maxPrice %></span>
+        <% } %>
+        <% if(typeof category !== 'undefined' && category) { %>
+            <span class="badge bg-warning">Category: <%= category %></span>
+        <% } %>
+        <a href="/listings" class="badge bg-danger text-decoration-none">Clear All</a>
+    </div>
+    
+    <% if (listings.length === 0) { %>
+        <div class="alert alert-info mt-4">
+            <p>No listings found matching your filters.</p>
+            <a href="/listings" class="btn btn-primary">View All Listings</a>
+        </div>
+    <% } else { %>
+        <p class="text-muted mt-3"><%= listings.length %> listing(s) found</p>
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+            <% for (let listing of listings) { %>
+                <a href="/listings/<%= listing._id %>" class="listing-link">
+                    <div class="card col listing-card">
+                        <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height:20rem">
+                        <div class="card-img-overlay"></div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <b><%= listing.title %></b><br>
+                                &#8377; <%= listing.price.toLocaleString("en-IN") %> / night
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            <% } %>
+        </div>
+    <% } %>
+</div>

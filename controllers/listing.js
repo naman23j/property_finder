@@ -1,4 +1,3 @@
-
 const Listing=require("../models/listing");
 module.exports.index =async (req,res)=>{
    const allListings= await Listing.find({});
@@ -60,36 +59,39 @@ await listing.save();
    res.redirect(`/listings/${id}`);
 }
 
-// module.exports.updateListing = async (req, res) => {
-//     const { id } = req.params;
-//     let listing = await Listing.findById(id);
-
-//     if (!listing) {
-//         req.flash("error", "Listing not found");
-//         return res.redirect("/listings");
-//     }
-
-//     // Update fields from form
-//     Object.assign(listing, req.body.listing);
-
-//     // If a new image is uploaded, replace the old one
-//     if (req.file) {
-//         listing.image = {
-//             url: req.file.path,
-//             filename: req.file.filename
-//         };
-//     }
-
-//     // If no new image uploaded AND no previous image exists
-//     if (!req.file && !listing.image?.url) {
-//         req.flash("error", "Image is required.");
-//         return res.redirect(`/listings/${id}/edit`);
-//     }
-
-//     await listing.save();
-//     req.flash("success", "Listing updated successfully!");
-//     res.redirect(`/listings/${listing._id}`);
-// };
+module.exports.searchListings = async (req, res) => {
+    const { query, location, minPrice, maxPrice, category } = req.query;
+    
+    let searchCriteria = {};
+    
+    // Text search in title and description
+    if (query) {
+        searchCriteria.$or = [
+            { title: { $regex: query, $options: 'i' } },
+            { description: { $regex: query, $options: 'i' } }
+        ];
+    }
+    
+    // Location filter
+    if (location) {
+        searchCriteria.location = { $regex: location, $options: 'i' };
+    }
+    
+    // Price range filter
+    if (minPrice || maxPrice) {
+        searchCriteria.price = {};
+        if (minPrice) searchCriteria.price.$gte = parseInt(minPrice);
+        if (maxPrice) searchCriteria.price.$lte = parseInt(maxPrice);
+    }
+    
+    // Category filter
+    if (category) {
+        searchCriteria.category = category;
+    }
+    
+    const listings = await Listing.find(searchCriteria);
+    res.render("listings/search", { listings, query });
+};
 
 
 

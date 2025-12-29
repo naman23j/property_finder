@@ -18,11 +18,23 @@
     border-radius: 25px;
     padding: 0.5rem 3rem 0.5rem 3rem;
   }
+
+  .filter-btn{
+    background-color: white;
+    color:#fe424f;
+    border:1px solid #fe424f;
+    margin-left: 10px;
+    border-radius: 0%;
+    padding: 0.375rem 0.75rem;
+  }
+  .filter-btn:hover{
+    background-color: #fe424f;
+    color: white;
+  }
+  .filter-btn i{
+    margin-right: 5px;
+  }
 </style>
-
-
-
-
 
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
@@ -39,9 +51,13 @@
       <div class="navbar-nav ms-auto">
      
           <div class="container-fluid">
-            <form class="d-flex" role="search">
-              <input class="form-control me-2 search-inp" type="search" placeholder="Search Destinations" aria-label="Search">
+            <form class="d-flex" role="search" action="/listings/search" method="GET">
+              <input class="form-control me-2 search-inp" type="search" name="query" placeholder="Search Destinations" aria-label="Search">
               <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
+              <!-- Filter Button - Same height as search button -->
+              <button class="btn filter-btn" type="button" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="fa-solid fa-filter"></i>
+              </button>
             </form>
           </div>
       
@@ -59,3 +75,4 @@
     </div>
   </div>
 </nav>
+

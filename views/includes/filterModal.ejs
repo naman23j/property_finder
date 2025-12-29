@@ -1,0 +1,60 @@
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterModalLabel"><i class="fa-solid fa-filter"></i> Filter Listings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/listings/search" method="GET">
+        <div class="modal-body">
+          
+          <!-- Search Query -->
+          <div class="mb-3">
+            <label for="query" class="form-label">Search</label>
+            <input type="text" class="form-control" id="query" name="query" placeholder="Enter keyword...">
+          </div>
+
+          <!-- Location -->
+          <div class="mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" placeholder="Enter location...">
+          </div>
+
+          <!-- Price Range -->
+          <div class="mb-3">
+            <label class="form-label">Price Range (per night)</label>
+            <div class="row">
+              <div class="col-6">
+                <input type="number" class="form-control" name="minPrice" placeholder="Min Price" min="0">
+              </div>
+              <div class="col-6">
+                <input type="number" class="form-control" name="maxPrice" placeholder="Max Price" min="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" name="category">
+              <option value="">All Categories</option>
+              <option value="Beachfront">Beachfront</option>
+              <option value="Mountain">Mountain</option>
+              <option value="City">City</option>
+              <option value="Countryside">Countryside</option>
+              <option value="Villa">Villa</option>
+              <option value="Apartment">Apartment</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="/listings" class="btn btn-outline-danger">Clear Filters</a>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

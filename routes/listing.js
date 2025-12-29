@@ -30,6 +30,8 @@ router.route("/")
     validateListing,
     wrapAsync( listingControllers.createListing));
 
+//SEARCH ROUTE
+    router.get("/search", wrapAsync(listingControllers.searchListings));
 
 //NEW ROUTE
 router.get("/new",isLoggedIn,listingControllers.rendernewListing);
