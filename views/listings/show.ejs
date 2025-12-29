@@ -102,13 +102,28 @@
                             </div>
                         </div>
                         
-                        <button type="submit" class="btn w-100" style="background-color: #fe424f; color: white; font-weight: 600;">
-                            <i class="fa-solid fa-calendar-check"></i> Reserve
+                        <button type="button" class="btn w-100 mb-2" style="background-color: #fe424f; color: white; font-weight: 600;" onclick="submitBooking('direct')">
+                            <i class="fa-solid fa-calendar-check"></i> Book Now (Pay Later)
                         </button>
-                        <p class="text-center text-muted small mt-2">You won't be charged yet</p>
+                        <button type="button" class="btn w-100 btn-outline-secondary" onclick="submitBooking('payment')">
+                            <i class="fa-solid fa-credit-card"></i> Reserve with Payment
+                        </button>
+                        <p class="text-center text-muted small mt-2">Choose your preferred booking option</p>
                     </form>
                 </div>
             </div>
+            
+            <script>
+                function submitBooking(type) {
+                    const form = document.querySelector('form[action*="/book"]');
+                    if (type === 'direct') {
+                        form.action = '/listings/<%= listing._id %>/book-direct';
+                    } else {
+                        form.action = '/listings/<%= listing._id %>/book';
+                    }
+                    form.submit();
+                }
+            </script>
             <% } else if(!currUser) { %>
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body text-center p-4">
@@ -215,6 +230,39 @@
     document.getElementById('checkIn').setAttribute('min', today);
     document.getElementById('checkOut').setAttribute('min', today);
 
+    // Booked dates from server
+    const bookedDates = <%- JSON.stringify(bookedDates) %>;
+
+    // Function to check if a date is within a booked range
+    function isDateBooked(dateString) {
+        const checkDate = new Date(dateString);
+        for (const booking of bookedDates) {
+            const start = new Date(booking.start);
+            const end = new Date(booking.end);
+            if (checkDate >= start && checkDate < end) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Function to check if date range conflicts with bookings
+    function hasConflict(checkIn, checkOut) {
+        const startDate = new Date(checkIn);
+        const endDate = new Date(checkOut);
+        
+        for (const booking of bookedDates) {
+            const bookedStart = new Date(booking.start);
+            const bookedEnd = new Date(booking.end);
+            
+            // Check for overlap
+            if (startDate < bookedEnd && endDate > bookedStart) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Calculate price based on dates
     const pricePerNight = <%= listing.price %>;
     const checkInInput = document.getElementById('checkIn');
@@ -258,6 +306,24 @@
         if (checkOut <= checkIn) {
             e.preventDefault();
             alert('Check-out date must be after check-in date!');
+            return;
+        }
+
+        // Check for conflicts with existing bookings
+        if (hasConflict(checkInInput.value, checkOutInput.value)) {
+            e.preventDefault();
+            alert('These dates overlap with an existing booking. Please choose different dates.');
+            return;
+        }
+    });
+
+    // Visual feedback for booked dates (optional enhancement)
+    checkInInput.addEventListener('focus', function() {
+        if (bookedDates.length > 0) {
+            const message = bookedDates.map(b => 
+                `${new Date(b.start).toLocaleDateString()} - ${new Date(b.end).toLocaleDateString()}`
+            ).join(', ');
+            console.log('Currently booked dates:', message);
         }
     });
 </script>

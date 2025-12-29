@@ -3,9 +3,13 @@ const router = express.Router();
 const wrapAsync = require("../utils/wrapAsync");
 const { isLoggedIn } = require("../middleware");
 const bookingController = require("../controllers/booking");
+// Create booking without payment
+router.post("/listings/:id/book-direct", isLoggedIn, wrapAsync(bookingController.createBookingDirect));
+// Create payment order
+router.post("/listings/:id/book", isLoggedIn, wrapAsync(bookingController.createOrder));
 
-// Create booking
-router.post("/listings/:id/book", isLoggedIn, wrapAsync(bookingController.createBooking));
+// Verify payment and create booking
+router.post("/bookings/verify-payment", isLoggedIn, wrapAsync(bookingController.verifyPayment));
 
 // Show single booking
 router.get("/bookings/:id", isLoggedIn, wrapAsync(bookingController.showBooking));

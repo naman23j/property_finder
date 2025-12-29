@@ -1,5 +1,6 @@
 
-const User=require("../models/user")
+const User=require("../models/user");
+const { sendWelcomeEmail } = require("../utils/emailService");
 
 module.exports.renderSignupForm=(req,res)=>{
     res.render("users/signup.ejs");
@@ -12,6 +13,10 @@ let {username, email ,password} = req.body;
 const newUser =new User({username,email});
 const registeredUser = await User.register(newUser,password);
 console.log(registeredUser);
+
+// Send welcome email
+await sendWelcomeEmail(registeredUser);
+
 req.login(registeredUser,(err)=>{
     if (err){
         return next(err);

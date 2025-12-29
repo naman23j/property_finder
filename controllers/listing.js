@@ -1,4 +1,6 @@
 const Listing=require("../models/listing");
+const Booking=require("../models/booking");
+
 module.exports.index =async (req,res)=>{
    const allListings= await Listing.find({});
    res.render("listings/index.ejs",{allListings});
@@ -17,8 +19,20 @@ module.exports.showListing=(async(req,res) =>{
           req.flash("error","cannot find that listing");
           return res.redirect("/listings");
       };
+      
+      // Get all booked dates for this listing
+      const bookings = await Booking.find({
+          listing: id,
+          status: { $ne: 'cancelled' }
+      }).select('checkIn checkOut');
+      
+      const bookedDates = bookings.map(booking => ({
+          start: booking.checkIn.toISOString().split('T')[0],
+          end: booking.checkOut.toISOString().split('T')[0]
+      }));
+      
       console.log(listing);
-      res.render("listings/show.ejs",{listing});
+      res.render("listings/show.ejs",{listing, bookedDates});
 })
 
 module.exports.createListing=async(req,res,next)=>{

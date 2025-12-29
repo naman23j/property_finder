@@ -47,12 +47,13 @@ app.use(methodOverride("_method"));
 
 
 const sessionOptions={
-    secret:"mysecret",resave:false,
+    secret:"mysecret",
+    resave:false,
     saveUninitialized:true,
     cookie:{
-        expires:Date.now(+7*24*60*60*1000),
+        expires:Date.now() + 7*24*60*60*1000,
         httpOnly:true,
-        maxAge:1000*60*60*24*7,
+        maxAge:7*24*60*60*1000,
     },
 };
 
