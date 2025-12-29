@@ -65,6 +65,9 @@
 
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Add new listings</a>
+        <% if(currUser){ %>
+        <a class="nav-link" href="/bookings"><i class="fa-solid fa-calendar-check"></i> My Bookings</a>
+        <% } %>
         <% if(!currUser){ %>
         <a class="nav-link "href="/signup"><b>SignUp</b></a>
         <a class="nav-link" href="/login"><b>Login</b></a> <% }%>

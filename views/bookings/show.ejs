@@ -1,0 +1,105 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #28a745;"></i>
+                <h2 class="fw-bold mt-3">Booking Confirmed!</h2>
+                <p class="text-muted">Your reservation has been successfully confirmed</p>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img src="<%= booking.listing.image.url %>" 
+                                 class="img-fluid rounded" 
+                                 alt="<%= booking.listing.title %>">
+                        </div>
+                        <div class="col-md-7">
+                            <h4 class="fw-bold mb-3"><%= booking.listing.title %></h4>
+                            <p class="text-muted mb-3">
+                                <i class="fa-solid fa-location-dot"></i> 
+                                <%= booking.listing.location %>, <%= booking.listing.country %>
+                            </p>
+                            
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">Booking Details</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fa-solid fa-calendar-days"></i> Check-in:</span>
+                                    <strong><%= new Date(booking.checkIn).toLocaleDateString('en-IN', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'}) %></strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fa-solid fa-calendar-days"></i> Check-out:</span>
+                                    <strong><%= new Date(booking.checkOut).toLocaleDateString('en-IN', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'}) %></strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fa-solid fa-moon"></i> Number of nights:</span>
+                                    <strong><%= booking.numberOfNights %></strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><i class="fa-solid fa-users"></i> Guests:</span>
+                                    <strong><%= booking.guests %></strong>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">Price Breakdown</h6>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>₹<%= booking.listing.price %> × <%= booking.numberOfNights %> nights</span>
+                                    <span>₹<%= booking.totalPrice.toLocaleString('en-IN') %></span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <strong>Total</strong>
+                                    <h4 class="text-danger mb-0">₹<%= booking.totalPrice.toLocaleString('en-IN') %></h4>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <h6 class="text-muted mb-2">Booking Status</h6>
+                                <% if(booking.status === 'confirmed') { %>
+                                    <span class="badge bg-success fs-6">Confirmed</span>
+                                <% } else if(booking.status === 'pending') { %>
+                                    <span class="badge bg-warning fs-6">Pending</span>
+                                <% } %>
+                                <% if(booking.paymentStatus === 'pending') { %>
+                                    <span class="badge bg-warning fs-6 ms-2">Payment Pending</span>
+                                <% } %>
+                            </div>
+
+                            <div class="alert alert-info mb-3">
+                                <i class="fa-solid fa-info-circle"></i>
+                                <strong>Note:</strong> You haven't been charged yet. Payment will be processed separately.
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <a href="/bookings" class="btn btn-primary flex-fill" style="background-color: #fe424f; border: none;">
+                                    <i class="fa-solid fa-list"></i> My Bookings
+                                </a>
+                                <a href="/listings" class="btn btn-outline-secondary flex-fill">
+                                    <i class="fa-solid fa-home"></i> Browse More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3">What's Next?</h5>
+                    <ol class="mb-0">
+                        <li class="mb-2">You'll receive a confirmation email shortly</li>
+                        <li class="mb-2">The host will be notified of your booking</li>
+                        <li class="mb-2">Payment details will be sent to you</li>
+                        <li class="mb-2">Contact the host if you have any questions</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

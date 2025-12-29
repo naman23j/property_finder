@@ -18,6 +18,7 @@ const flash =require("connect-flash");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const bookingRouter = require("./routes/booking.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
@@ -84,6 +85,7 @@ app.use((req,res,next)=>{
 app.use("/listings",listings);
 app.use("/listings/:id/reviews",reviews);
 app.use("/",userRouter);
+app.use("/",bookingRouter);
 
 
 // app.get("/testingListing",async(req,res)=>{
