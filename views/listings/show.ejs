@@ -6,51 +6,82 @@
         <!-- Listing Details -->
         <div class="col-lg-8 mb-4">
             <div class="card shadow-sm border-0">
-                <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 400px; object-fit: cover; border-radius: 10px 10px 0 0;">
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="<%= listing.title %>" style="height: 450px; object-fit: cover; border-radius: 10px 10px 0 0;">
                 <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h2 class="fw-bold mb-2"><%= listing.title %></h2>
-                            <p class="text-muted mb-0">
-                                <i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %>
+                    <!-- Title and Price -->
+                    <div class="mb-4">
+                        <h2 class="fw-bold mb-3" style="font-size: 1.75rem; color: #222;">
+                            <%= listing.title %>
+                        </h2>
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+                            <p class="text-muted mb-0" style="font-size: 1rem;">
+                                <i class="fa-solid fa-location-dot" style="color: #fe424f;"></i> 
+                                <strong><%= listing.location %></strong>, <%= listing.country %>
                             </p>
-                        </div>
-                        <div class="text-end">
-                            <h3 class="text-danger mb-0">₹<%= listing.price.toLocaleString("en-IN") %></h3>
-                            <small class="text-muted">per night</small>
+                            <div class="price-badge px-4 py-2 rounded-3" style="background: linear-gradient(135deg, #fe424f 0%, #ff6b6b 100%); box-shadow: 0 4px 15px rgba(254, 66, 79, 0.3);">
+                                <h3 class="mb-0 text-white" style="font-size: 1.5rem; font-weight: 700;">
+                                    ₹<%= listing.price.toLocaleString("en-IN") %>
+                                </h3>
+                                <small class="text-white" style="opacity: 0.9; font-weight: 500;">per night</small>
+                            </div>
                         </div>
                     </div>
                     
-                    <hr>
+                    <hr style="border-color: #e0e0e0; margin: 1.5rem 0;">
                     
-                    <div class="mb-3">
-                        <h5 class="fw-bold mb-2">About this place</h5>
-                        <p class="text-muted"><%= listing.description %></p>
+                    <!-- About Section -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-3" style="color: #333; font-size: 1.25rem;">
+                            <i class="fa-solid fa-circle-info" style="color: #fe424f;"></i> About this place
+                        </h5>
+                        <p class="text-muted" style="line-height: 1.8; font-size: 0.95rem;">
+                            <%= listing.description %>
+                        </p>
                     </div>
                     
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="fa-solid fa-user-circle fs-3 text-muted me-2"></i>
-                        <div>
-                            <small class="text-muted d-block">Hosted by</small>
-                            <strong><%= listing.owner.username %></strong>
+                    <hr style="border-color: #e0e0e0; margin: 1.5rem 0;">
+                    
+                    <!-- Host Section -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold mb-3" style="color: #333; font-size: 1.25rem;">
+                            <i class="fa-solid fa-user-tie" style="color: #fe424f;"></i> Your Host
+                        </h5>
+                        <div class="d-flex align-items-center p-3 rounded-3" style="background-color: #f8f9fa; border-left: 4px solid #fe424f;">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                 style="width: 60px; height: 60px; background: linear-gradient(135deg, #fe424f 0%, #ff6b6b 100%); color: white; font-size: 1.5rem; font-weight: 600;">
+                                <%= listing.owner.username.charAt(0).toUpperCase() %>
+                            </div>
+                            <div>
+                                <h6 class="mb-1 fw-bold" style="color: #222; font-size: 1.1rem;">
+                                    <%= listing.owner.username %>
+                                </h6>
+                                <small class="text-muted">
+                                    <i class="fa-solid fa-shield-halved"></i> Verified Host
+                                </small>
+                            </div>
                         </div>
                     </div>
 
                     <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
-                    <hr>
-                    <div class="d-flex gap-2 mb-3">
-                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning flex-fill">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit Listing
+                    <hr style="border-color: #e0e0e0; margin: 1.5rem 0;">
+                    <div class="owner-actions">
+                        <h6 class="fw-bold mb-3 text-muted" style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <i class="fa-solid fa-crown" style="color: #ffc107;"></i> Owner Actions
+                        </h6>
+                        <div class="d-flex gap-2 mb-3">
+                            <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning flex-fill" style="font-weight: 600;">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit Listing
+                            </a>
+                            <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="flex-fill">
+                                <button class="btn btn-danger w-100" style="font-weight: 600;" onclick="return confirm('Are you sure you want to delete this listing?')">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                        <a href="/listings/<%= listing._id %>/bookings" class="btn btn-info w-100" style="font-weight: 600;">
+                            <i class="fa-solid fa-calendar-days"></i> View All Bookings
                         </a>
-                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="flex-fill">
-                            <button class="btn btn-danger w-100" onclick="return confirm('Are you sure you want to delete this listing?')">
-                                <i class="fa-solid fa-trash"></i> Delete
-                            </button>
-                        </form>
                     </div>
-                    <a href="/listings/<%= listing._id %>/bookings" class="btn btn-info w-100">
-                        <i class="fa-solid fa-calendar-days"></i> View Bookings
-                    </a>
                     <% } %>
                 </div>
             </div>
@@ -130,7 +161,7 @@
                     <i class="fa-solid fa-calendar-days fs-1 mb-3" style="color: #fe424f;"></i>
                     <h5 class="mb-2">Ready to book?</h5>
                     <p class="text-muted mb-3">Log in to reserve this amazing place</p>
-                    <a href="/login" class="btn w-100" style="background-color: #fe424f; color: white;">Login to Book</a>
+                    <a href="/login" class="btn w-10" style="background-color: #fe424f; color: white;">Login to Book</a>
                 </div>
             </div>
             <% } %>
@@ -138,73 +169,157 @@
             <!-- Leave a Review -->
             <% if(currUser) { %>
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <h5 class="fw-bold mb-3">Leave a Review</h5>
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fa-solid fa-star text-warning"></i> Leave a Review
+                    </h5>
                     <form action="/listings/<%= listing._id %>/reviews" method="POST" novalidate class="needs-validation">
                         <div class="mb-3">
-                            <label for="rating" class="form-label">Rating</label>
-                            <fieldset class="starability-slot">
-                                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
-                                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
-                                <label for="first-rate1" title="Terrible">1 star</label>
-                                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
-                                <label for="first-rate2" title="Not good">2 stars</label>
-                                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
-                                <label for="first-rate3" title="Average">3 stars</label>
-                                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
-                                <label for="first-rate4" title="Very good">4 stars</label>
-                                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
-                                <label for="first-rate5" title="Amazing">5 stars</label>
-                            </fieldset>
+                            <label class="form-label fw-bold mb-3">How would you rate your experience?</label>
+                            <div class="star-rating-input d-flex align-items-center gap-2 mb-2">
+                                <div class="stars-container" id="starRating">
+                                    <i class="fa-regular fa-star star-icon" data-rating="1"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="2"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="3"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="4"></i>
+                                    <i class="fa-regular fa-star star-icon" data-rating="5"></i>
+                                </div>
+                                <span id="ratingText" class="text-muted small"></span>
+                                <input type="hidden" name="review[rating]" id="ratingValue" value="0" required>
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="comment" class="form-label">Comments</label>
-                            <textarea name="review[comment]" id="comment" rows="4" class="form-control" required placeholder="Share your experience..."></textarea>
+                            <label for="comment" class="form-label fw-bold">Share your experience</label>
+                            <textarea name="review[comment]" id="comment" rows="4" class="form-control" required placeholder="Tell us about your stay... What did you love? What could be improved?"></textarea>
                             <div class="invalid-feedback">Please add your review.</div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100" style="background-color: #fe424f; border: none;">
+                        <button type="submit" class="btn w-100" style="background-color: #fe424f; color: white; font-weight: 600;">
                             <i class="fa-solid fa-paper-plane"></i> Submit Review
                         </button>
                     </form>
                 </div>
             </div>
+            
+            <style>
+                .star-rating-input {
+                    user-select: none;
+                }
+                
+                .stars-container {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .star-icon {
+                    font-size: 2rem;
+                    color: #ddd;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .star-icon:hover,
+                .star-icon.active {
+                    color: #ffc107;
+                    transform: scale(1.1);
+                }
+                
+                .star-icon.fa-solid {
+                    color: #ffc107;
+                }
+                
+                #ratingText {
+                    min-width: 100px;
+                    font-weight: 500;
+                }
+            </style>
+            
+            <script>
+                const stars = document.querySelectorAll('.star-icon');
+                const ratingValue = document.getElementById('ratingValue');
+                const ratingText = document.getElementById('ratingText');
+                const ratingError = document.getElementById('ratingError');
+                const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+                let selectedRating = 0;
+                
+                stars.forEach(star => {
+                    star.addEventListener('click', function() {
+                        selectedRating = parseInt(this.dataset.rating);
+                        ratingValue.value = selectedRating;
+                        updateStars(selectedRating);
+                        ratingText.textContent = ratingLabels[selectedRating];
+                        ratingText.style.color = '#fe424f';
+                        ratingError.style.display = 'none';
+                    });
+                    
+                    star.addEventListener('mouseenter', function() {
+                        const rating = parseInt(this.dataset.rating);
+                        updateStars(rating, true);
+                    });
+                });
+                
+                document.getElementById('starRating').addEventListener('mouseleave', function() {
+                    updateStars(selectedRating);
+                });
+                
+                function updateStars(rating, isHover = false) {
+                    stars.forEach((star, index) => {
+                        if (index < rating) {
+                            star.classList.remove('fa-regular');
+                            star.classList.add('fa-solid');
+                            star.style.color = '#ffc107';
+                        } else {
+                            star.classList.remove('fa-solid');
+                            star.classList.add('fa-regular');
+                            star.style.color = '#ddd';
+                        }
+                    });
+                }
+                
+                // Form validation
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    if (selectedRating === 0) {
+                        e.preventDefault();
+                        ratingError.style.display = 'block';
+                    }
+                });
+            </script>
             <% } else { %>
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body text-center">
-                    <i class="fa-solid fa-star fs-1 text-warning mb-2"></i>
-                    <h6 class="mb-2">Want to leave a review?</h6>
-                    <p class="text-muted small mb-3">Please log in to share your experience</p>
-                    <a href="/login" class="btn btn-primary btn-sm" style="background-color: #fe424f; border: none;">Login</a>
+                <div class="card-body text-center p-4">
+                    <i class="fa-solid fa-star fs-1 text-warning mb-3"></i>
+                    <h5 class="mb-2">Want to leave a review?</h5>
+                    <p class="text-muted mb-3">Please log in to share your experience</p>
+                    <a href="/login" class="btn w-10" style="background-color: #fe424f; color: white;">Login</a>
                 </div>
             </div>
             <% } %>
 
             <!-- All Reviews -->
             <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h5 class="fw-bold mb-3">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">
                         <i class="fa-solid fa-comments"></i> Reviews 
                         <span class="badge bg-secondary"><%= listing.reviews.length %></span>
                     </h5>
                     
                     <% if(listing.reviews.length === 0) { %>
-                        <div class="text-center text-muted py-4">
-                            <i class="fa-regular fa-comment fs-1 mb-2"></i>
-                            <p>No reviews yet. Be the first to review!</p>
+                        <div class="text-center text-muted py-5">
+                            <i class="fa-regular fa-comment fs-1 mb-3"></i>
+                            <p class="mb-0">No reviews yet. Be the first to review!</p>
                         </div>
                     <% } else { %>
                         <div class="reviews-container" style="max-height: 500px; overflow-y: auto;">
                             <% for(review of listing.reviews) { %>
-                            <div class="review-item border-bottom pb-3 mb-3">
+                            <div class="review-item pb-3 mb-3 <%= listing.reviews.indexOf(review) < listing.reviews.length - 1 ? 'border-bottom' : '' %>">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div>
-                                        <h6 class="mb-1 fw-bold">
-                                            <i class="fa-solid fa-user-circle text-muted"></i> 
+                                        <h6 class="mb-2 fw-bold">
+                                            <i class="fa-solid fa-user-circle text-muted me-1"></i> 
                                             <%= review.author ? review.author.username : 'Anonymous' %>
                                         </h6>
-                                        <p class="starability-result mb-1" data-rating="<%= review.rating %>"></p>
+                                        <p class="starability-result mb-0" data-rating="<%= review.rating %>"></p>
                                     </div>
                                     <% if(currUser && review.author && review.author._id.equals(currUser._id)) { %>
                                     <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
@@ -214,7 +329,7 @@
                                     </form>
                                     <% } %>
                                 </div>
-                                <p class="text-muted mb-0"><%= review.comment %></p>
+                                <p class="text-muted mb-0 mt-2"><%= review.comment %></p>
                             </div>
                             <% } %>
                         </div>
