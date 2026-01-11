@@ -93,6 +93,12 @@ module.exports.createOrder = async (req, res) => {
     // Calculate total price
     const totalPrice = listing.price * numberOfNights;
     
+    // Check if Razorpay is configured
+    if (!razorpay) {
+        req.flash("error", "Payment gateway not configured. Please contact administrator.");
+        return res.redirect(`/listings/${id}`);
+    }
+    
     // Create Razorpay order
     const options = {
         amount: totalPrice * 100, // amount in paise
