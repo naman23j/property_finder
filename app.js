@@ -5,7 +5,7 @@ const express=require ("express");
 const app =express();
 const mongoose =require("mongoose");
 // const Listing = require("./models/listing.js");
-const MONGO_DB="mongodb://127.0.0.1:27017/WonderPlace";
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/WonderPlace";
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate =require("ejs-mate");
@@ -24,7 +24,7 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
  async function main() {
- await mongoose.connect(MONGO_DB);
+ await mongoose.connect(dbUrl);
  };
 
  main()
@@ -132,6 +132,10 @@ app.use((err,req,res,next)=>{
 //     res.status(404).send("page not found");
 // });
 
-app.listen(8080,()=>{
-console.log("server is listening to port 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`server is listening to port ${port}`);
 });
+
+// Export for Vercel
+module.exports = app;
