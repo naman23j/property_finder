@@ -49,11 +49,11 @@
                         <div class="d-flex align-items-center p-3 rounded-3" style="background-color: #f8f9fa; border-left: 4px solid #fe424f;">
                             <div class="rounded-circle d-flex align-items-center justify-content-center me-3" 
                                  style="width: 60px; height: 60px; background: linear-gradient(135deg, #fe424f 0%, #ff6b6b 100%); color: white; font-size: 1.5rem; font-weight: 600;">
-                                <%= listing.owner.username.charAt(0).toUpperCase() %>
+                                <%= listing.owner ? listing.owner.username.charAt(0).toUpperCase() : 'H' %>
                             </div>
                             <div>
                                 <h6 class="mb-1 fw-bold" style="color: #222; font-size: 1.1rem;">
-                                    <%= listing.owner.username %>
+                                    <%= listing.owner ? listing.owner.username : 'EasyStay Host' %>
                                 </h6>
                                 <small class="text-muted">
                                     <i class="fa-solid fa-shield-halved"></i> Verified Host
@@ -62,7 +62,7 @@
                         </div>
                     </div>
 
-                    <% if(currUser && listing.owner._id.equals(currUser._id)) { %>
+                    <% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)) { %>
                     <hr style="border-color: #e0e0e0; margin: 1.5rem 0;">
                     <div class="owner-actions">
                         <h6 class="fw-bold mb-3 text-muted" style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">
@@ -90,7 +90,7 @@
         <!-- Booking & Reviews Section -->
         <div class="col-lg-4">
             <!-- Booking Form -->
-            <% if(currUser && !listing.owner._id.equals(currUser._id)) { %>
+            <% if(currUser && (!listing.owner || !listing.owner._id.equals(currUser._id))) { %>
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3">
