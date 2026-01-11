@@ -2,14 +2,16 @@ const mongoose = require("mongoose");
 const initData = require("./data.js");
 const Listing = require("../models/listing.js");
 
-const MONGO_DB = "mongodb://127.0.0.1:27017/WonderPlace";
+// Use Atlas URL from environment or fallback to local
+require("dotenv").config({ path: "../.env" });
+const MONGO_DB = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/WonderPlace";
 
 main()
   .then(() => {
-    console.log("connected to db");
+    console.log("✅ Connected to database:", MONGO_DB.includes('mongodb.net') ? 'Atlas' : 'Local');
   })
   .catch((err) => {
-    console.log(err);
+    console.log("❌ Connection failed:", err);
     process.exit(1);
   });
 
