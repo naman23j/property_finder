@@ -14,7 +14,6 @@ const ExpressError = require("./utils/ExpressError.js");
 // const { listingSchema,reviewSchema }= require("./schema.js");
 // const Review = require("./models/review.js");
 const session =require("express-session");
-const MongoStore = require('connect-mongo');
 const flash =require("connect-flash");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -23,6 +22,15 @@ const bookingRouter = require("./routes/booking.js");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+
+// Try to import MongoStore, but don't crash if it fails
+let MongoStore = null;
+try {
+    MongoStore = require('connect-mongo');
+    console.log("✅ MongoStore loaded");
+} catch (err) {
+    console.warn("⚠️  connect-mongo not available, using memory store");
+}
 
  async function main() {
  await mongoose.connect(dbUrl);
@@ -48,17 +56,30 @@ app.use(methodOverride("_method"));
 
 
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET || "mysecret"
-    },
-    touchAfter: 24 * 3600
-});
-
-store.on("error", (err) => {
-    console.error("ERROR in MONGO SESSION STORE", err);
-});
+// Create session store (use MongoDB if available, otherwise memory)
+let store;
+if (MongoStore && dbUrl) {
+    try {
+        store = MongoStore.create({
+            mongoUrl: dbUrl,
+            crypto: {
+                secret: process.env.SECRET || "mysecret"
+            },
+            touchAfter: 24 * 3600
+        });
+        
+        store.on("error", (err) => {
+            console.error("❌ ERROR in MONGO SESSION STORE", err);
+        });
+        
+        console.log("✅ Using MongoDB session store");
+    } catch (err) {
+        console.warn("⚠️  Failed to create MongoStore:", err.message);
+        store = undefined; // Use default memory store
+    }
+} else {
+    console.warn("⚠️  Using memory session store (sessions won't persist across requests in production)");
+}
 
 const sessionOptions={
     store,
