@@ -1,7 +1,18 @@
 const transporter = require("../config/email");
 
+// Helper function to check if email is configured
+const isEmailConfigured = () => {
+    if (!transporter) {
+        console.warn("⚠️  Email not sent - transporter not configured");
+        return false;
+    }
+    return true;
+};
+
 // Send Booking Confirmation Email
 const sendBookingConfirmation = async (booking, user, listing) => {
+    if (!isEmailConfigured()) return;
+    
     const mailOptions = {
         from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
@@ -102,6 +113,8 @@ const sendBookingConfirmation = async (booking, user, listing) => {
 
 // Send Welcome Email
 const sendWelcomeEmail = async (user) => {
+    if (!isEmailConfigured()) return;
+    
     const mailOptions = {
         from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
@@ -161,7 +174,10 @@ const sendWelcomeEmail = async (user) => {
 };
 
 // Send Payment Confirmation Email
+// Send Payment Confirmation Email
 const sendPaymentConfirmation = async (booking, user, listing, payment) => {
+    if (!isEmailConfigured()) return;
+    
     const mailOptions = {
         from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
@@ -241,7 +257,10 @@ const sendPaymentConfirmation = async (booking, user, listing, payment) => {
 };
 
 // Send Cancellation Email
+// Send Cancellation Email
 const sendCancellationEmail = async (booking, user, listing) => {
+    if (!isEmailConfigured()) return;
+    
     const mailOptions = {
         from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
