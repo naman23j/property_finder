@@ -3,9 +3,9 @@ const transporter = require("../config/email");
 // Send Booking Confirmation Email
 const sendBookingConfirmation = async (booking, user, listing) => {
     const mailOptions = {
-        from: process.env.EMAIL_FROM || "WonderPlace <noreply@wonderplace.com>",
+        from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
-        subject: "Booking Confirmation - WonderPlace",
+        subject: "Booking Confirmation - EasyStay",
         html: `
             <!DOCTYPE html>
             <html>
@@ -80,10 +80,10 @@ const sendBookingConfirmation = async (booking, user, listing) => {
                         </center>
 
                         <p>If you have any questions, feel free to contact us.</p>
-                        <p>Safe travels!<br>The WonderPlace Team</p>
+                        <p>Safe travels!<br>The EasyStay Team</p>
                     </div>
                     <div class="footer">
-                        <p>© 2025 WonderPlace. All rights reserved.</p>
+                        <p>© 2025 EasyStay. All rights reserved.</p>
                         <p>This is an automated email, please do not reply.</p>
                     </div>
                 </div>
@@ -103,9 +103,9 @@ const sendBookingConfirmation = async (booking, user, listing) => {
 // Send Welcome Email
 const sendWelcomeEmail = async (user) => {
     const mailOptions = {
-        from: process.env.EMAIL_FROM || "WonderPlace <noreply@wonderplace.com>",
+        from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
-        subject: "Welcome to WonderPlace! 🎉",
+        subject: "Welcome to EasyStay! 🎉",
         html: `
             <!DOCTYPE html>
             <html>
@@ -122,11 +122,11 @@ const sendWelcomeEmail = async (user) => {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>Welcome to WonderPlace! 🏡</h1>
+                        <h1>Welcome to EasyStay! 🏡</h1>
                     </div>
                     <div class="content">
                         <p>Hi ${user.username},</p>
-                        <p>Thank you for joining WonderPlace! We're thrilled to have you as part of our community.</p>
+                        <p>Thank you for joining EasyStay! We're thrilled to have you as part of our community.</p>
                         
                         <p><strong>What you can do:</strong></p>
                         <ul>
@@ -141,10 +141,10 @@ const sendWelcomeEmail = async (user) => {
                         </center>
 
                         <p>If you have any questions, we're here to help!</p>
-                        <p>Happy travels!<br>The WonderPlace Team</p>
+                        <p>Happy travels!<br>The EasyStay Team</p>
                     </div>
                     <div class="footer">
-                        <p>© 2025 WonderPlace. All rights reserved.</p>
+                        <p>© 2025 EasyStay. All rights reserved.</p>
                     </div>
                 </div>
             </body>
@@ -163,9 +163,9 @@ const sendWelcomeEmail = async (user) => {
 // Send Payment Confirmation Email
 const sendPaymentConfirmation = async (booking, user, listing, payment) => {
     const mailOptions = {
-        from: process.env.EMAIL_FROM || "WonderPlace <noreply@wonderplace.com>",
+        from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
-        subject: "Payment Received - WonderPlace",
+        subject: "Payment Received - EasyStay",
         html: `
             <!DOCTYPE html>
             <html>
@@ -220,10 +220,10 @@ const sendPaymentConfirmation = async (booking, user, listing, payment) => {
                         </div>
 
                         <p>Your booking is now confirmed and you're all set for your stay!</p>
-                        <p>Have a wonderful trip!<br>The WonderPlace Team</p>
+                        <p>Have a wonderful trip!<br>The EasyStay Team</p>
                     </div>
                     <div class="footer">
-                        <p>© 2025 WonderPlace. All rights reserved.</p>
+                        <p>© 2025 EasyStay. All rights reserved.</p>
                         <p>Keep this email for your records.</p>
                     </div>
                 </div>
@@ -243,9 +243,9 @@ const sendPaymentConfirmation = async (booking, user, listing, payment) => {
 // Send Cancellation Email
 const sendCancellationEmail = async (booking, user, listing) => {
     const mailOptions = {
-        from: process.env.EMAIL_FROM || "WonderPlace <noreply@wonderplace.com>",
+        from: process.env.EMAIL_FROM || "EasyStay <noreply@easystay.com>",
         to: user.email,
-        subject: "Booking Cancelled - WonderPlace",
+        subject: "Booking Cancelled - EasyStay",
         html: `
             <!DOCTYPE html>
             <html>
@@ -281,10 +281,10 @@ const sendCancellationEmail = async (booking, user, listing) => {
                             <a href="${process.env.BASE_URL || 'http://localhost:8080'}/listings" class="button">Browse Other Listings</a>
                         </center>
 
-                        <p>We hope to see you again soon!<br>The WonderPlace Team</p>
+                        <p>We hope to see you again soon!<br>The EasyStay Team</p>
                     </div>
                     <div class="footer">
-                        <p>© 2025 WonderPlace. All rights reserved.</p>
+                        <p>© 2025 EasyStay. All rights reserved.</p>
                     </div>
                 </div>
             </body>

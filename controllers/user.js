@@ -21,7 +21,7 @@ req.login(registeredUser,(err)=>{
     if (err){
         return next(err);
     }
-        req.flash("success","welcome to wonderplace");
+        req.flash("success","welcome to EasyStay");
             res.redirect("/listings");
    
 });
@@ -37,7 +37,7 @@ module.exports.renderLoginForm=(req,res)=>{
 }
 
 module.exports.login=async(req,res)=>{
-    req.flash("success","welcome back to wonderplace");
+    req.flash("success","welcome back to EasyStay");
     let redirectUrl =res.locals.redirectUrl || "/listings";
     res.redirect(redirectUrl);
 }
