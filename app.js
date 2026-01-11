@@ -14,6 +14,7 @@ const ExpressError = require("./utils/ExpressError.js");
 // const { listingSchema,reviewSchema }= require("./schema.js");
 // const Review = require("./models/review.js");
 const session =require("express-session");
+const MongoStore = require('connect-mongo');
 const flash =require("connect-flash");
 const listings = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
@@ -45,9 +46,21 @@ app.use(methodOverride("_method"));
 
 
 
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    crypto: {
+        secret: process.env.SECRET || "mysecret"
+    },
+    touchAfter: 24 * 3600
+});
+
+store.on("error", () => {
+    console.log("ERROR in MONGO SESSION STORE", err);
+});
 
 const sessionOptions={
-    secret:"mysecret",
+    store,
+    secret: process.env.SECRET || "mysecret",
     resave:false,
     saveUninitialized:true,
     cookie:{
