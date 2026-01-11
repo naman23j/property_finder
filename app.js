@@ -30,15 +30,17 @@ const User = require("./models/user.js");
 
  main()
     .then(()=>{
-    console.log("connected to db");
+    console.log("✅ Connected to MongoDB:", dbUrl.includes('mongodb.net') ? 'Atlas' : 'Local');
  })
  .catch((err) => {
-    console.log(err);
+    console.error("❌ MongoDB Connection Failed:", err.message);
+    console.error("Full error:", err);
 });
 
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
-app.use(express.urlencoded({extended:true}));
+app.use(express.json({ limit: "4mb" }));
+app.use(express.urlencoded({extended:true, limit: "4mb"}));
 app.use(methodOverride("_method"));
  app.engine("ejs",ejsMate)
  app.use(express.static(path.join(__dirname,"/public")));
@@ -54,8 +56,8 @@ const store = MongoStore.create({
     touchAfter: 24 * 3600
 });
 
-store.on("error", () => {
-    console.log("ERROR in MONGO SESSION STORE", err);
+store.on("error", (err) => {
+    console.error("ERROR in MONGO SESSION STORE", err);
 });
 
 const sessionOptions={
@@ -69,6 +71,16 @@ const sessionOptions={
         maxAge:7*24*60*60*1000,
     },
 };
+
+// Health check endpoint for debugging
+app.get("/api/health", (req, res) => {
+    res.json({
+        status: "OK",
+        timestamp: new Date().toISOString(),
+        database: mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
+        env: process.env.NODE_ENV || "development"
+    });
+});
 
 app.get("/", (req, res) => {
     res.render("home.ejs", { currUser: req.user });
@@ -136,6 +148,15 @@ next (new ExpressError (404,"page not found here!!"));
 
 app.use((err,req,res,next)=>{
     let{statusCode=500,message="something went wrong"}=err;
+    
+    // Log error details for Vercel logs
+    console.error("❌ ERROR CAUGHT:", {
+        message: err.message,
+        statusCode,
+        stack: err.stack,
+        url: req.url,
+        method: req.method
+    });
  
     res.status(statusCode).render("error.ejs",{message})
        // res.status(statusCode).send(message);
