@@ -145,10 +145,13 @@ app.use((err,req,res,next)=>{
 //     res.status(404).send("page not found");
 // });
 
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-    console.log(`server is listening to port ${port}`);
-});
+// Only listen when running locally
+if (process.env.NODE_ENV !== "production") {
+    const port = process.env.PORT || 8080;
+    app.listen(port, () => {
+        console.log(`server is listening to port ${port}`);
+    });
+}
 
 // Export for Vercel
 module.exports = app;
